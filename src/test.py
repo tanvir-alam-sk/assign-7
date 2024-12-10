@@ -84,6 +84,8 @@ def validate_url_status(driver):
     except Exception as e:
         return "Fail", f"Error validating URL status: {e}"
 
+
+
 # Test: Validate currency filter
 def validate_currency_filter(driver):
     try:
@@ -120,7 +122,8 @@ def main():
     # Wait for the page to load completely (you can adjust this as per the website)
     WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, "a")))  # Wait for links to load
     
-    all_links = scrape_all_links(driver)  
+    all_links = validate_currency_filter(driver)  
+    # all_links = scrape_all_links(driver)  
 
     results = []
 

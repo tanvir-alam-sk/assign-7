@@ -1,30 +1,40 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from config import TEST_URL, DRIVER_PATH, OUTPUT_FILE
-from test_cases import validate_h1_tag, validate_html_sequence, validate_image_alt
-from utils import write_to_excel
+from utils.browser import init_browser
+from tests.test_scraping import extract_all_links, test_currency_filter
+from tests.test_validations import test_h1_tag, test_html_tag_sequence, test_image_alt, test_url_status_code
+from utils.data_scraper import scrape_script_data
+from utils.excel_writer import save_to_excel
 
-def setup_driver():
-    options = Options()
-    options.add_argument("--headless")
-    driver_service = Service(DRIVER_PATH)
-    return webdriver.Chrome(service=driver_service, options=options)
+SCRAPE_OUTPUT_FILE = "results/script_data_results.xlsx" 
 
-def main():
-    driver = setup_driver()
-    driver.get(TEST_URL)
-    results = []
+def run_tests():
+    url = "https://www.alojamiento.io"
+    browser = init_browser()
+    test_results = []
+    
+    # result = test_h1_tag(browser, url)
+    # test_results.append({"page_url": url, "testcase": "H1 Tag Existence", "status": result, "comments": "Missing H1 Tag" if result == "Fail" else ""})
 
-    # Run tests
-    h1_result = validate_h1_tag(driver)
-    results.append({"Test": "H1 Tag Existence", "Result": h1_result})
+    # result = test_html_tag_sequence(browser, url)
+    # test_results.append({"page_url": url, "testcase": "HTML Tag Sequence", "status": result, "comments": "Missing/Out of Order Tags" if result == "Fail" else ""})
 
+    # result = test_image_alt(browser, url)
+    # test_results.append({"page_url": url, "testcase": "Image Alt Attribute", "status": result, "comments": "Missing Alt Attribute" if result == "Fail" else ""})
 
-    # Add more test results...
-    write_to_excel(results, OUTPUT_FILE)
-
-    driver.quit()
+    # links = extract_all_links(browser, url)
+    # url_status_results = test_url_status_code(links)
+    # test_results.extend(url_status_results)
+    
+    result = test_currency_filter(browser, url)
+    print(result)
+    # test_results.append({"page_url": url, "testcase": "Currency Filter", "status": result['status'], "comments": result['comments']})
+    # save_to_excel(test_results,[])
+    # data = scrape_script_data(browser, url)
+    # if data:
+    #     save_to_excel(test_results,[data])
+    # else:
+    #     print("No data to write to Excel")
+    
+    browser.quit()
 
 if __name__ == "__main__":
-    main()
+    run_tests()

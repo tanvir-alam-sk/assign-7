@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 # Initialize browser and set options
+SCRAPE_OUTPUT_FILE = "script_data_results.xlsx" 
 def init_browser():
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Uncomment for headless mode
@@ -108,44 +109,47 @@ def save_to_excel(test_results, filename="test_results.xlsx"):
     df.to_excel(filename, index=False)
 
 
-# Scrape data from script tag
-import json
-SCRAPE_OUTPUT_FILE = "script_data_results.xlsx" 
-def scrape_script_data(driver):
-    try:
-        scripts = driver.find_elements(By.TAG_NAME, "script")
-        for script in scripts:
-            script_content = script.get_attribute("innerHTML")
-            if script_content:
-                try:
-                    # Attempt to parse JSON content from script
-                    data = json.loads(script_content.strip())
-                    
-                    # Extract required fields
-                    return {
-                        "SiteURL": data.get("SiteURL", ""),
-                        "CampaignID": data.get("CampaignID", ""),
-                        "SiteName": data.get("SiteName", ""),
-                        "Browser": data.get("Browser", ""),
-                        "CountryCode": data.get("CountryCode", ""),
-                        "IP": data.get("IP", ""),
+
+
+def scrape_script_data(driver, url):
+    # driver = webdriver.Chrome()
+    driver.get(url)
+    script_data=driver.execute_script("return window.ScriptData")
+    pagedata = script_data.get('pagedata', {})
+    if isinstance(script_data,dict):
+        site_url=script_data['config'].get('SiteUrl', 'Not Found')
+        site_name=script_data['config'].get('SiteName', 'Not Found')
+        campaing_id=script_data['pageData'].get('CampaignId', 'Not Found')
+        
+        user_info=script_data.get('userInfo',{})
+        browser=user_info.get('Browser','Not Found')
+        country_code=user_info.get('CountryCode','Not Found')
+        ip=user_info.get('IP','Not Found')
+        return {
+                        "SiteURL": site_url,
+                        "SiteName": site_name,
+                        "CampaignID": campaing_id,
+                        "Browser": browser,
+                        "CountryCode": country_code,
+                        "IP": ip,
                     }
-                except json.JSONDecodeError:
-                    continue  # Skip non-JSON content
-        return None  # No valid data found
-    except Exception as e:
-        print(f"Error scraping script data: {e}")
-        return None
+    else:
+        site_url=site_name,=campaing_id=browser=country_code=ip='Not Found'
+        data=[]
+        return data
     
 
-def write_to_excel(data, file_name):
+def write_to_excel(data, filename):
     try:
-        print(data)
-        df = pd.DataFrame(data)  # Convert list of dicts to DataFrame
-        df.to_excel(file_name, index=False)
-        print(f"Data successfully written to {file_name}")
+        # Convert to DataFrame
+        df = pd.DataFrame(data)
+        
+        # Save to Excel
+        df.to_excel(filename, index=False)
+        print(f"Data saved successfully to {filename}")
+    
     except Exception as e:
-        print(f"Error writing to Excel: {e}")
+        print(f"Error saving to Excel: {e}")
 
 
 # Main test execution function
@@ -188,12 +192,12 @@ def run_tests():
 
     data = []
 
-    script_data = scrape_script_data(browser)
+    script_data = scrape_script_data(browser, url)
     if script_data:
         data.append(script_data)
     else:
         print("No valid script data found")
-    
+    print(data)
     if data:
         write_to_excel(data, SCRAPE_OUTPUT_FILE)
     else:

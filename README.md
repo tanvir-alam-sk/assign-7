@@ -13,7 +13,6 @@ Automates the testing of vacation rental details pages for SEO and functionality
 - `chromedriver/`: WebDriver binaries.
 - `results/`: Directory for storing test results.
 - `src/`: Source code.
-  - `config.py`: Configuration (URLs, paths, etc.).
   - `main.py`: Main script to run the tests.
   - `test_cases.py`: Test functions for various cases.
   - `utils.py`: Helper functions.
@@ -23,11 +22,12 @@ Automates the testing of vacation rental details pages for SEO and functionality
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/your-repo/vacation_rental_test.git
+   git clone https://github.com/tanvir-alam-sk/assign-7 vacation_rental_test
    cd vacation_rental_test
 
    ```
 2. Place WebDriver in the `chromedriver/` directory.
+
 3. Download All Packege
    **Create the Virtual Environment**
 
@@ -35,12 +35,15 @@ Automates the testing of vacation rental details pages for SEO and functionality
    python -m venv venv
    ```
 
-   **[Activate the Virtual Environment]()**
+   **[Activate the Virtual Environment Linux]()**
 
    ```bash
    source venv/bin/activate
-   venv\Scripts\activate
+   ```
+   **[Activate the Virtual Environment Windows]()**
 
+   ```bash
+   venv\Scripts\activate
    ```
 
    **Install Dependencies**
@@ -83,4 +86,4 @@ vacation_rental_test/
 
 ## Output
 
-Results will be saved in the `results/` directory as `results.xlsx` (or `results.csv`).
+Results will be saved in the `results/` directory as `results/test_results.xlsx` (or `results/test_results.csv`).

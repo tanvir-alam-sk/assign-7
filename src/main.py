@@ -11,28 +11,27 @@ def run_tests():
     browser = init_browser()
     test_results = []
     
-    # result = test_h1_tag(browser, url)
-    # test_results.append({"page_url": url, "testcase": "H1 Tag Existence", "status": result, "comments": "Missing H1 Tag" if result == "Fail" else ""})
+    result = test_h1_tag(browser, url)
+    test_results.append({"page_url": url, "testcase": "H1 Tag Existence", "status": result, "comments": "Missing H1 Tag" if result == "Fail" else ""})
 
-    # result = test_html_tag_sequence(browser, url)
-    # test_results.append({"page_url": url, "testcase": "HTML Tag Sequence", "status": result, "comments": "Missing/Out of Order Tags" if result == "Fail" else ""})
+    result = test_html_tag_sequence(browser, url)
+    test_results.append({"page_url": url, "testcase": "HTML Tag Sequence", "status": result, "comments": "Missing/Out of Order Tags" if result == "Fail" else ""})
 
-    # result = test_image_alt(browser, url)
-    # test_results.append({"page_url": url, "testcase": "Image Alt Attribute", "status": result, "comments": "Missing Alt Attribute" if result == "Fail" else ""})
+    result = test_image_alt(browser, url)
+    test_results.append({"page_url": url, "testcase": "Image Alt Attribute", "status": result, "comments": "Missing Alt Attribute" if result == "Fail" else ""})
 
-    # links = extract_all_links(browser, url)
-    # url_status_results = test_url_status_code(links)
-    # test_results.extend(url_status_results)
+    links = extract_all_links(browser, url)
+    url_status_results = test_url_status_code(links)
+    test_results.extend(url_status_results)
     
-    result = test_currency_filter(browser, url)
-    print(result)
-    # test_results.append({"page_url": url, "testcase": "Currency Filter", "status": result['status'], "comments": result['comments']})
-    # save_to_excel(test_results,[])
-    # data = scrape_script_data(browser, url)
-    # if data:
-    #     save_to_excel(test_results,[data])
-    # else:
-    #     print("No data to write to Excel")
+    currency_result = test_currency_filter(browser, url)
+    test_results.extend(currency_result)
+
+    data = scrape_script_data(browser, url)
+    if data:
+        save_to_excel(test_results,[data])
+    else:
+        print("No data to write to Excel")
     
     browser.quit()
 

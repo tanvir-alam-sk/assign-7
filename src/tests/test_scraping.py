@@ -15,6 +15,7 @@ def extract_all_links(driver, url):
 
 def test_currency_filter(driver, url):
     driver.get(url)
+    test_currency=[]
     try:
         print("Waiting for the currency dropdown to be present in the DOM...")
         
@@ -44,8 +45,10 @@ def test_currency_filter(driver, url):
                 price=WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, '.price-info.js-price-value'))
                 )
+                test_currency.append({"page_url": url, "testcase": "Currency Fillter", "status": "Pass", "comments": f"Update Price Currency Type{price.text}"})
             except Exception as e:
                 print(f"Error occurred: {e}")
+                test_currency.append={"page_url": url, "testcase": "Currency Fillter", "status": "Fail", "comments": f"Error occurred: {e}"}
                 import traceback
                 traceback.print_exc()
 
@@ -58,6 +61,9 @@ def test_currency_filter(driver, url):
     
     except Exception as e:
         print(f"Error occurred: {e}")
+        test_currency.append={"page_url": url, "testcase": "Currency Fillter", "status": "Fail", "comments": f"Error occurred: {e}"}
         import traceback
         traceback.print_exc()
 
+    finally:
+        return test_currency

@@ -32,7 +32,7 @@ Automates the testing of vacation rental details pages for SEO and functionality
    **Create the Virtual Environment**
 
    ```bash
-   python -m venv venv
+   python3 -m venv venv
    ```
 
    **[Activate the Virtual Environment Linux]()**

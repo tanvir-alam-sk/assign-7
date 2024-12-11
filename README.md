@@ -69,7 +69,6 @@ vacation_rental_test/
 │   └── results.xlsx
 ├── src/                       # Source code directory
 │   ├── __init__.py
-│   ├── config.py
 │   ├── main.py
 │   ├── test_cases.py
 │   └── utils.py
